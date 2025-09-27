@@ -1,0 +1,29 @@
+.dashboard-container {
+  padding: 2rem;
+}
+
+.card-item {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+@media (max-width: 600px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  .card-item {
+    padding: 0.5rem;
+  }
+}

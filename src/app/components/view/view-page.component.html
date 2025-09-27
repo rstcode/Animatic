@@ -1,0 +1,11 @@
+<div *ngIf="loading" class="loading">Loading...</div>
+<div *ngIf="card && !loading" class="view-container">
+  <div *ngIf="countdown > 0" class="countdown">
+    <h2>Revealing in {{ countdown }} seconds...</h2>
+  </div>
+  <div *ngIf="countdown === 0" class="card-view" [ngClass]="card.animationType" [style.fontFamily]="card.font">
+    <button *ngIf="showFullscreenBtn" mat-raised-button color="primary" (click)="goFullscreen()">Fullscreen</button>
+    <h3>{{ card.title }}</h3>
+    <p>{{ card.description }}</p>
+  </div>
+</div>

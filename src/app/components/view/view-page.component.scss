@@ -1,0 +1,69 @@
+.view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.card-view {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  transition: all 0.5s;
+}
+
+.countdown {
+  font-size: 2rem;
+  color: #1976d2;
+  margin-bottom: 2rem;
+}
+
+.fade-in {
+  animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide {
+  animation: slideIn 0.7s;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.typewriter {
+  overflow: hidden;
+  border-right: .15em solid #333;
+  white-space: nowrap;
+  animation: typing 2s steps(30, end), blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #333; }
+}
+
+@media (max-width: 600px) {
+  .card-view {
+    padding: 1rem;
+  }
+  .countdown {
+    font-size: 1.2rem;
+  }
+}

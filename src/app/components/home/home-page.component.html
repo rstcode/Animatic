@@ -1,0 +1,13 @@
+<div class="home-container">
+  <h1>Animatic</h1>
+  <h2>Where text comes alive</h2>
+  <button mat-raised-button color="primary" (click)="auth.loginWithGoogle()">Get Started</button>
+  <div *ngIf="auth.getCurrentUser() as user" class="greeting">
+    <p>{{ getGreeting() }}, {{ user.displayName }}!</p>
+    <nav>
+      <a mat-button routerLink="/creator">Creator Page</a>
+      <a mat-button routerLink="/dashboard">Dashboard</a>
+      <a mat-button routerLink="/profile">Profile</a>
+    </nav>
+  </div>
+</div>
