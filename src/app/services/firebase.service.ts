@@ -1,36 +1,55 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Card } from '../models/card.model';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class FirebaseService {
-  // TODO: Inject AngularFire services
+  private collectionName = 'cards';
 
-  createCard(card: Card): Promise<string> {
-    // TODO: Save card to Firestore and return code
-    return Promise.resolve('ABC123');
+  constructor(private afs: AngularFirestore) {}
+
+  /**
+   * Create a new card document
+   */
+  async createCard(card: Card): Promise<void> {
+    return this.afs.collection<Card>(this.collectionName).doc(card.code).set(card);
   }
 
-  getCardByCode(code: string): Promise<Card | null> {
-    // TODO: Fetch card by code
-    return Promise.resolve(null);
+  /**
+   * Get a card by its code
+   */
+  getCardByCode(code: string): Observable<Card | null> {
+    return this.afs.collection<Card>(this.collectionName)
+      .doc(code)
+      .valueChanges()
+      .pipe(map(data => data ? { ...data } as Card : null));
   }
 
-  getUserCards(userId: string): Promise<Card[]> {
-    // TODO: Fetch all cards for user
-    return Promise.resolve([]);
+  /**
+   * Get all cards created by a specific user
+   */
+  getUserCards(userId: string): Observable<Card[]> {
+    return this.afs.collection<Card>(this.collectionName, ref =>
+      ref.where('createdBy', '==', userId).orderBy('createdAt', 'desc')
+    )
+    .valueChanges();
   }
 
-  updateCard(card: Card): Promise<void> {
-    // TODO: Update card
-    return Promise.resolve();
+  /**
+   * Update an existing card
+   */
+  async updateCard(card: Card): Promise<void> {
+    return this.afs.collection<Card>(this.collectionName).doc(card.code).update(card);
   }
 
-  deleteCard(code: string): Promise<void> {
-    // TODO: Delete card
-    return Promise.resolve();
-  }
-
-  isRevealTimeFuture(card: Card): boolean {
-    return card.revealTime ? new Date(card.revealTime) > new Date() : false;
+  /**
+   * Delete a card by code
+   */
+  async deleteCard(code: string): Promise<void> {
+    return this.afs.collection<Card>(this.collectionName).doc(code).delete();
   }
 }

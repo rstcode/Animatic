@@ -1,3 +1,31 @@
-<div>
-  <h2>Dashboard Page</h2>
+<div class="dashboard-container">
+  <h2>Your Cards</h2>
+
+  <ng-container *ngIf="userCards$ | async as cards">
+    <div *ngIf="cards.length > 0; else noCards" class="card-grid">
+      <mat-card *ngFor="let card of cards" class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>{{ card.title }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ card.createdAt.toDate ? (card.createdAt.toDate() | date:'medium') : (card.createdAt | date:'medium') }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p>{{ card.description }}</p>
+          <p><strong>Animation:</strong> {{ card.animationType }}</p>
+          <p><strong>Font:</strong> {{ card.font }}</p>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="editCard(card.code)">Edit</button>
+          <button mat-button color="warn" (click)="deleteCard(card.code)">Delete</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <ng-template #noCards>
+      <p>No cards created yet. Try making one in the Creator page!</p>
+    </ng-template>
+  </ng-container>
 </div>

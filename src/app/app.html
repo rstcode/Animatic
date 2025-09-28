@@ -1,9 +1,20 @@
-  <h1>Hello, Animatic-app</h1>
-  <h2>{{title}}</h2>
-  <a routerLink="/dashboard">Go to Dashboard</a>
-  <br />
-  <a routerLink="/creator">Go to Creator</a>
-  <br />
-  <a [routerLink]="['/view', code]">Go to View (with code)</a>
-  
-  <router-outlet></router-outlet>
+<div class="app-container">
+  <!-- Header -->
+  <header class="header">
+    <h1 class="logo">Animatic</h1>
+
+    <div class="auth-actions" @if(!user)>
+      <button (click)="signIn()">Sign in with Google</button>
+    </div>
+
+    <div class="auth-actions" @if(user)>
+      <span class="welcome">Hi, {{ user.displayName }}</span>
+      <button (click)="signOut()">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,9 +1,49 @@
-<div>
-  <h2>Creator Page</h2>
+<div class="creator-container">
+  <h2>Create a New Card</h2>
 
+  <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="creator-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Enter card title" />
+      <mat-error *ngIf="cardForm.get('title')?.invalid">Title is required</mat-error>
+    </mat-form-field>
 
-<div class="preview-card" [ngClass]="preview.animationType" [style.fontFamily]="preview.font">
-  <h3>{{ preview.title }}</h3>
-  <p>{{ preview.description }}</p>
-</div>
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Animation</mat-label>
+      <mat-select formControlName="animationType">
+        <mat-option *ngFor="let anim of animations" [value]="anim">{{ anim }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Font</mat-label>
+      <mat-select formControlName="font">
+        <mat-option *ngFor="let font of fonts" [value]="font" [ngStyle]="{'font-family': font}">
+          {{ font }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Reveal Time (Optional)</mat-label>
+      <input matInput type="datetime-local" formControlName="revealTime" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="cardForm.invalid">
+      Save Card
+    </button>
+  </form>
+
+  <div class="preview">
+    <h3>Live Preview</h3>
+    <div class="preview-card" [ngClass]="previewCard.animationType" [ngStyle]="{'font-family': previewCard.font}">
+      <h1>{{ previewCard.title || 'Title Preview' }}</h1>
+      <p>{{ previewCard.description || 'Description Preview' }}</p>
+    </div>
+  </div>
 </div>

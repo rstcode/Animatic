@@ -24,10 +24,10 @@ export class HomePageComponent {
   }
 
   loginWithGoogle() {
-    this.auth.loginWithGoogle();
+    this.auth.googleSignIn();
   }
 
   logout() {
-    this.auth.logout();
+    this.auth.signOut();
   }
 }

@@ -24,7 +24,7 @@ export class ViewPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe(params => {
       const code = params['code'];
-      this.firebaseService.getCardByCode(code).then(card => {
+      this.firebaseService.getCardByCode(code).subscribe(card => {
         this.card = card;
         if (card?.revealTime) {
           const revealDate = new Date(card.revealTime);

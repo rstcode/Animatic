@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterModule, RouterOutlet, RouterLink } from '@angular/router';
 import { routes } from './app.routes';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -24,19 +25,29 @@ import { routes } from './app.routes';
     MatDatepickerModule,
     MatButtonModule,
     MatIconModule,
-    RouterOutlet,
-    RouterLink
+    RouterOutlet
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
 export class App {
   protected readonly title ='animatic-app';
-  constructor(private router: Router,private route: ActivatedRoute) {}
+  user = null;
+  constructor(private router: Router,private route: ActivatedRoute, private authService: AuthService) {}
   code = 'exampleCode123'; // Example code for the link
 
   ngOnInit() {
     const code = this.route.snapshot.paramMap.get('code');
+     // Subscribe to user state
+    this.authService.user$.subscribe(u => this.user = u);
+  }
+
+  signIn() {
+    this.authService.googleSignIn().catch(err => console.error(err));
+  }
+
+  signOut() {
+    this.authService.signOut().catch(err => console.error(err));
   }
 
   goToDashboard() {
