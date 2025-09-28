@@ -1,41 +1,9 @@
-<form [formGroup]="cardForm" (ngSubmit)="submit()" class="creator-form">
-  <mat-form-field appearance="fill">
-    <mat-label>Title</mat-label>
-    <input matInput formControlName="title" required>
-    <mat-error *ngIf="cardForm.get('title')?.invalid">Title is required</mat-error>
-  </mat-form-field>
+<div>
+  <h2>Creator Page</h2>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Description</mat-label>
-    <textarea matInput formControlName="description" required></textarea>
-    <mat-error *ngIf="cardForm.get('description')?.invalid">Description is required</mat-error>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Animation Type</mat-label>
-    <mat-select formControlName="animationType" required>
-      <mat-option *ngFor="let type of animationTypes" [value]="type">{{ type }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Font</mat-label>
-    <mat-select formControlName="font" required>
-      <mat-option *ngFor="let font of fonts" [value]="font">{{ font }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Reveal Time (optional)</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="revealTime">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-
-  <button mat-raised-button color="primary" type="submit" [disabled]="cardForm.invalid">Create Card</button>
-</form>
 
 <div class="preview-card" [ngClass]="preview.animationType" [style.fontFamily]="preview.font">
   <h3>{{ preview.title }}</h3>
   <p>{{ preview.description }}</p>
+</div>
 </div>

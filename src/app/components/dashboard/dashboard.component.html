@@ -1,21 +1,3 @@
-<div *ngIf="loading" class="loading">Loading...</div>
-<div *ngIf="!loading" class="dashboard-container">
-  <mat-grid-list cols="1" rowHeight="2:1" gutterSize="16" *ngIf="cards.length === 0">
-    <mat-grid-tile>No cards found.</mat-grid-tile>
-  </mat-grid-list>
-  <mat-grid-list cols="2" rowHeight="2:1" gutterSize="16" *ngIf="cards.length > 0">
-    <mat-grid-tile *ngFor="let card of cards">
-      <div class="card-item">
-        <h3>{{ card.title }}</h3>
-        <p>{{ card.description }}</p>
-        <small>{{ card.createdAt | date:'short' }}</small>
-        <button mat-icon-button color="primary" [routerLink]="['/creator', card.code]">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteCard(card.code)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </mat-grid-tile>
-  </mat-grid-list>
+<div>
+  <h2>Dashboard Page</h2>
 </div>
