@@ -1,69 +1,56 @@
-.view-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
+.view-card {
+  text-align: center;
+  background-color: #ffffff !important; /* white background always */
+  color: #000000 !important; /* black text */
+  padding: 20px;
+  width: 100%;
 }
 
-.card-view {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #fafafa;
-  transition: all 0.5s;
+/* Heavy big title */
+.heavy-title {
+  font-size: 3rem;   /* Big & bold */
+  font-weight: 900;  /* Extra heavy */
 }
 
-.countdown {
-  font-size: 2rem;
-  color: #1976d2;
-  margin-bottom: 2rem;
+/* Description styling */
+.card-description {
+  max-width: 90%;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
+/* Animations */
 .fade-in {
-  animation: fadeIn 1s;
+  animation: fadeIn 1.5s ease-in-out both;
 }
 
+.slide {
+  animation: slideUp 1.5s ease both;
+}
+
+.typewriter h1 {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #000; /* black cursor */
+  animation: typing 2.5s steps(30, end), blink .75s step-end infinite;
+}
+
+/* Keyframes */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-.slide {
-  animation: slideIn 0.7s;
-}
-
-@keyframes slideIn {
-  from { transform: translateY(100px); opacity: 0; }
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-.typewriter {
-  overflow: hidden;
-  border-right: .15em solid #333;
-  white-space: nowrap;
-  animation: typing 2s steps(30, end), blink-caret .75s step-end infinite;
-}
-
 @keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+  from { width: 0; }
+  to { width: 100%; }
 }
 
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: #333; }
-}
-
-@media (max-width: 600px) {
-  .card-view {
-    padding: 1rem;
-  }
-  .countdown {
-    font-size: 1.2rem;
-  }
+@keyframes blink {
+  50% { border-color: transparent; }
 }

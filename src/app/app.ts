@@ -1,56 +1,50 @@
-
 import { Component, signal } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router, RouterModule, RouterOutlet, RouterLink } from '@angular/router';
-import { routes } from './app.routes';
+import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
+import { FirebaseService } from './services/firebase.service';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatDatepickerModule,
-    MatButtonModule,
-    MatIconModule,
-    RouterOutlet
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
 export class App {
-  protected readonly title ='animatic-app';
-  user = null;
-  constructor(private router: Router,private route: ActivatedRoute, private authService: AuthService) {}
-  code = 'exampleCode123'; // Example code for the link
+  protected readonly title = signal('FireTest');
+  public user$: Observable<any>;
 
-  ngOnInit() {
-    const code = this.route.snapshot.paramMap.get('code');
-     // Subscribe to user state
-    this.authService.user$.subscribe(u => this.user = u);
+  constructor(private auth: AuthService, private router: Router, private firebaseService: FirebaseService) {
+    this.user$ = this.auth.user$;
   }
 
-  signIn() {
-    this.authService.googleSignIn().catch(err => console.error(err));
+  login() {
+    this.auth.googleSignIn().then((user) => {
+        console.log('Signed in user:', user);
+        if (user) {
+          this.firebaseService
+            .saveUserProfile(user.uid, {
+              displayName: (user.displayName as string) || '',
+              email: (user.email as string) || '',
+              profilePic: (user.photoURL as string) || null,
+              lastLogin: Math.floor(Date.now() / 1000)
+            })
+            .catch((err) => console.warn('saveUserProfile failed', err))
+            .finally(() => this.router.navigate(['/dashboard']));
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
+      })
+      .catch((err) => {
+        console.error('Sign-in error:', err);
+        alert('Sign-in failed: ' + (err?.message || err));
+      })
+      .finally(() => {});
   }
 
-  signOut() {
-    this.authService.signOut().catch(err => console.error(err));
-  }
-
-  goToDashboard() {
-    this.router.navigate(['/dashboard']);
+  logout() {
+    this.auth.signOut().then(() => { this.router.navigate(['/login']); }).
+    catch(err => {console.error('Sign-out error:', err); });
   }
 }

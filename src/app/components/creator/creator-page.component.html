@@ -1,49 +1,71 @@
-<div class="creator-container">
-  <h2>Create a New Card</h2>
+<div class="container py-4">
+  <h2 class="text-center fw-bold mb-4">{{ editMode ? 'Edit Card' : 'Create Your Card' }}</h2>
 
-  <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="creator-form">
-    <mat-form-field appearance="outline">
-      <mat-label>Title</mat-label>
-      <input matInput formControlName="title" placeholder="Enter card title" />
-      <mat-error *ngIf="cardForm.get('title')?.invalid">Title is required</mat-error>
-    </mat-form-field>
+  <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="needs-validation">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description" rows="3"></textarea>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Animation</mat-label>
-      <mat-select formControlName="animationType">
-        <mat-option *ngFor="let anim of animations" [value]="anim">{{ anim }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Font</mat-label>
-      <mat-select formControlName="font">
-        <mat-option *ngFor="let font of fonts" [value]="font" [ngStyle]="{'font-family': font}">
-          {{ font }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Reveal Time (Optional)</mat-label>
-      <input matInput type="datetime-local" formControlName="revealTime" />
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" type="submit" [disabled]="cardForm.invalid">
-      Save Card
-    </button>
-  </form>
-
-  <div class="preview">
-    <h3>Live Preview</h3>
-    <div class="preview-card" [ngClass]="previewCard.animationType" [ngStyle]="{'font-family': previewCard.font}">
-      <h1>{{ previewCard.title || 'Title Preview' }}</h1>
-      <p>{{ previewCard.description || 'Description Preview' }}</p>
+    <!-- Title -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Title *</label>
+      <input type="text" class="form-control"
+             formControlName="title"
+             placeholder="Enter your title">
+      <div class="text-danger small" *ngIf="cardForm.get('title')?.touched && cardForm.get('title')?.invalid">
+        Title is required
+      </div>
     </div>
-  </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Description</label>
+      <textarea class="form-control"
+                rows="3"
+                formControlName="description"
+                placeholder="Enter short message..."></textarea>
+    </div>
+
+    <!-- Animation Type Dropdown -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Animation Type *</label>
+      <select class="form-select" formControlName="animationType">
+        <option value="" disabled selected>Select animation</option>
+        <option value="fade-slide">Fade & Slide</option>
+        <option value="pop">Pop</option>
+        <option value="zoom">Zoom</option>
+        <option value="typewriter">Typewriter</option>
+      </select>
+      <div class="text-danger small" *ngIf="cardForm.get('animationType')?.touched && cardForm.get('animationType')?.invalid">
+        Animation type is required
+      </div>
+    </div>
+
+    <!-- Font Dropdown -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Font *</label>
+      <select class="form-select" formControlName="font">
+        <option value="" disabled selected>Select font</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Poppins">Poppins</option>
+        <option value="Montserrat">Montserrat</option>
+        <option value="Playfair Display">Playfair Display</option>
+      </select>
+      <div class="text-danger small" *ngIf="cardForm.get('font')?.touched && cardForm.get('font')?.invalid">
+        Font selection is required
+      </div>
+    </div>
+
+    <!-- Reveal Time -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Reveal Time (Optional)</label>
+      <input type="datetime-local" class="form-control" formControlName="revealTime">
+      <div class="form-text">If set, card will be locked until this time.</div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="cardForm.invalid">
+        {{ editMode ? 'Update Card' : 'Create Card' }}
+    </button>
+
+  </form>
 </div>

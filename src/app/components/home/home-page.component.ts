@@ -10,10 +10,8 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent {
-  user$: Observable<any>;
 
   constructor(private auth: AuthService) {
-    this.user$ = this.auth.user$;
   }
 
   getGreeting(): string {

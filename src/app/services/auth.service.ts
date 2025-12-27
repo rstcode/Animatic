@@ -1,39 +1,43 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import firebase from 'firebase/compat/app';
+import { signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+import { firebaseAuth } from '../firebase';
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  user$: Observable<firebase.User | null>;
+  private provider = new GoogleAuthProvider();
+  public user$: Observable<FirebaseUser | null> = this.authState();
 
-  constructor(private afAuth: AngularFireAuth) {
-    // Live user state observable
-    this.user$ = this.afAuth.authState;
+  async signInWithGoogle(): Promise<FirebaseUser | null> {
+    if (!firebaseAuth) return Promise.reject(new Error('Auth not initialized'));
+    const result = await signInWithPopup(firebaseAuth, this.provider);
+    return result.user;
   }
 
-  /**
-   * Google Sign In
-   */
-  async googleSignIn(): Promise<firebase.auth.UserCredential> {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    return this.afAuth.signInWithPopup(provider);
+  googleSignIn(): Promise<FirebaseUser | null> {
+    return this.signInWithGoogle();
   }
 
-  /**
-   * Sign Out
-   */
-  async signOut(): Promise<void> {
-    return this.afAuth.signOut();
+  signOut(): Promise<void> {
+    if (!firebaseAuth) return Promise.reject(new Error('Auth not initialized'));
+    return signOut(firebaseAuth);
   }
 
-  /**
-   * Get current user once (not as observable)
-   */
-  getCurrentUser(): Promise<firebase.User | null> {
-    return this.afAuth.currentUser;
+  authState(): Observable<FirebaseUser | null> {
+    return new Observable((subscriber) => {
+      if (!firebaseAuth) {
+        subscriber.next(null);
+        subscriber.complete();
+        return;
+      }
+      const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => subscriber.next(user), (err) => subscriber.error(err));
+      return () => unsubscribe();
+    });
+  }
+
+  getCurrentUser(): FirebaseUser | null {
+    if (!firebaseAuth) return null;
+    return firebaseAuth.currentUser ?? null;
   }
 }

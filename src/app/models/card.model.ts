@@ -1,9 +1,10 @@
 export interface Card {
   title: string;
-  description: string;
-  animationType: 'fade-in' | 'slide' | 'typewriter';
-  font: 'Roboto' | 'Open Sans' | 'Bradley Hand';
-  revealTime?: Date;
+  description?: string;
+  animationType?: string;
+  font?: string;
+  backgroundColor?: string;
+  revealTime?: Date | null;
   code: string;
   createdBy: string;
   createdAt: Date;

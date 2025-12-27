@@ -1,20 +1,13 @@
-<div class="app-container">
-  <!-- Header -->
-  <header class="header">
-    <h1 class="logo">Animatic</h1>
-
-    <div class="auth-actions" @if(!user)>
-      <button (click)="signIn()">Sign in with Google</button>
+<header class="app-header" style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px;border-bottom:1px solid #eee;">
+    <div class="brand">
+        <a routerLink="/" style="display:inline-block;line-height:1;">
+            <img src="/assets/animatic.svg" alt="Animatic" style="height:40px;display:block;object-fit:contain;" />
+        </a>
     </div>
+	<div class="actions">
+    <a href="javascript:void(0)" *ngIf="!(user$ | async)" (click)="login()">Login</a> 
+    <a href="javascript:void(0)" *ngIf="user$ | async as user" (click)="logout()">Logout</a>
+	</div>
+</header>
 
-    <div class="auth-actions" @if(user)>
-      <span class="welcome">Hi, {{ user.displayName }}</span>
-      <button (click)="signOut()">Sign Out</button>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="content">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+<router-outlet></router-outlet>

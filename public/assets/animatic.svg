@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="40" viewBox="0 0 160 40">
+  <rect width="160" height="40" rx="6" fill="#1A73E8"/>
+  <text x="16" y="26" font-family="Poppins, Roboto, sans-serif" font-size="16" fill="#fff">Animatic</text>
+  <rect x="8" y="8" width="8" height="24" rx="2" fill="#fff" opacity="0.12"/>
+</svg>

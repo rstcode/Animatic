@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { generateRandomCode } from '../../utils/code-generator';
 import { Card } from '../../models/card.model';
 import { AuthService } from '../../services/auth.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -17,20 +12,16 @@ import { ReactiveFormsModule } from '@angular/forms';
   selector: 'app-creator-page',
   templateUrl: './creator-page.component.html',
   styleUrls: ['./creator-page.component.scss'],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatButtonModule
-  ],
-  standalone: true
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class CreatorPageComponent implements OnInit {
+  
   cardForm!: FormGroup;
   previewCard: Partial<Card> = {};
+  editMode = false;
+  cardCode: string | null = null;
+
   fonts = ['Roboto', 'Open Sans', 'Bradley Hand', 'Cursive', 'Monospace'];
   animations = ['fade-in', 'slide', 'typewriter'];
 
@@ -38,10 +29,12 @@ export class CreatorPageComponent implements OnInit {
     private fb: FormBuilder,
     private firebaseService: FirebaseService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+
     this.cardForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
@@ -50,36 +43,59 @@ export class CreatorPageComponent implements OnInit {
       revealTime: ['']
     });
 
-    // Live preview
-    this.cardForm.valueChanges.subscribe(val => {
-      this.previewCard = {
-        title: val.title,
-        description: val.description,
-        animationType: val.animationType,
-        font: val.font,
-        revealTime: val.revealTime
-      };
+    this.route.paramMap.subscribe(params => {
+      this.cardCode = params.get('code');
+      this.editMode = !!this.cardCode;
+
+      if (this.editMode && this.cardCode) {
+        this.firebaseService.getCardByCode(this.cardCode, this.authService.getCurrentUser()?.uid)
+          .subscribe(card => {
+            if (!card) return;
+            this.cardForm.patchValue({
+              title: card.title,
+              description: card.description,
+              animationType: card.animationType,
+              font: card.font,
+              revealTime: card.revealTime ? this.formatDate(card.revealTime) : ''
+            });
+            this.previewCard = card;
+          });
+      }
     });
+
+    this.cardForm.valueChanges.subscribe(val => this.previewCard = val);
+  }
+
+  // Convert Date → yyyy-MM-ddThh:mm for input[type=datetime-local]
+  formatDate(date: Date): string {
+    return new Date(date)
+      .toISOString()
+      .slice(0, 16); // remove seconds + Z
   }
 
   async onSubmit() {
     if (this.cardForm.invalid) return;
 
-    const code = generateRandomCode();
-    const user = await this.authService.getCurrentUser();
-
-    const newCard: Card = {
-      code,
-      title: this.cardForm.value.title,
-      description: this.cardForm.value.description,
-      animationType: this.cardForm.value.animationType,
-      font: this.cardForm.value.font,
-      revealTime: this.cardForm.value.revealTime ? new Date(this.cardForm.value.revealTime) : undefined,
+    const user = this.authService.getCurrentUser();
+    
+    const formValue = this.cardForm.value;
+    const card: Card = {
+      code: this.editMode ? this.cardCode! : generateRandomCode(),
+      title: formValue.title,
+      description: formValue.description,
+      animationType: formValue.animationType,
+      font: formValue.font,
+      revealTime: formValue.revealTime ? new Date(formValue.revealTime) : undefined,
       createdBy: user?.uid || 'anonymous',
       createdAt: new Date()
     };
 
-    await this.firebaseService.createCard(newCard);
-    this.router.navigate(['/view', code]);
+    if (this.editMode) {
+      await this.firebaseService.updateCard(card);
+      this.router.navigate(['/dashboard']);
+    } else {
+      await this.firebaseService.createCard(card);
+      this.router.navigate(['/view', card.code]);
+    }
   }
 }

@@ -2,37 +2,53 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { AuthService } from '../../services/auth.service';
 import { Card } from '../../models/card.model';
-import { Observable } from 'rxjs';
+import { Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { UserProfile } from '../../models/user.model';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  userCards$!: Observable<Card[]>;
+  userCards$: Observable<Card[]> = of([]);
+  loading = false;
+  loggedInUser: UserProfile = null;
+  private destroy$ = new Subject<void>();
+  constructor(private firebaseService: FirebaseService,private auth: AuthService) {}
 
-  constructor(
-    private firebaseService: FirebaseService,
-    private authService: AuthService
-  ) {}
-
-  async ngOnInit() {
-    const user = await this.authService.getCurrentUser();
-    if (user) {
-      this.userCards$ = this.firebaseService.getUserCards(user.uid);
-    }
-  }
-
-  async deleteCard(code: string) {
-    const confirmed = confirm('Are you sure you want to delete this card?');
-    if (confirmed) {
-      await this.firebaseService.deleteCard(code);
-    }
+  ngOnInit() {
+    this.userCards$ = this.auth.user$.pipe(
+      switchMap(currentUser => {
+        this.loggedInUser = {
+          uid: currentUser?.uid || '',
+          displayName: currentUser?.displayName || '',
+          email: currentUser?.email || '',
+          profilePic: currentUser?.photoURL || null,          
+        }
+        if (!currentUser) return of([]); // No login -> no cards
+        return this.firebaseService.getUserCards(currentUser.uid);
+      })
+    );
   }
 
   editCard(code: string) {
-    // Navigate to creator page with edit mode (to be implemented later)
-    alert(`Edit card with code: ${code}`);
+    console.log('Editing card:', code);
+    // Navigate to your Edit page (if exists)
+    // this.router.navigate(['/edit', code]);
+  }
+
+  async deleteCard(code: string) {
+    if (!confirm("Are you sure you want to delete this card?")) return;
+    try {
+      await this.firebaseService.deleteCard(code);
+      console.log(`Deleted card: ${code}`);
+    } catch (err) {
+      console.error("Failed to delete card:", err);
+    }
   }
 }

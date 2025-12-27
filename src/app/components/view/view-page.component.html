@@ -1,3 +1,42 @@
-<div>
-  <h2>View Page</h2>
+<div class="container-fluid p-0 text-center">
+
+  <!-- Loading -->
+  <div *ngIf="!card && !countdown" class="d-flex justify-content-center align-items-center vh-100">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Countdown before reveal -->
+  <div *ngIf="countdown && !revealReady" class="vh-100 d-flex flex-column justify-content-center align-items-center">
+    <h3 class="fw-bold mb-3">This card will reveal in</h3>
+    <h1 class="display-4 text-primary fw-bold">{{ countdown }}</h1>
+  </div>
+
+  <!-- Fullscreen Button -->
+  <button *ngIf="card && revealReady && showFullscreenBtn"
+          class="btn btn-dark position-fixed bottom-0 start-50 translate-middle-x mb-4 px-4 py-2 fw-semibold"
+          (click)="goFullscreen()">
+    View Fullscreen
+  </button>
+
+  <!-- Card Display -->
+  <div *ngIf="card && revealReady"
+       class="d-flex flex-column justify-content-center align-items-center vh-100 view-card px-3"
+       [ngClass]="getAnimationClass()">
+
+    <!-- Title -->
+    <h1 class="card-title fw-bold heavy-title mb-3"
+        [style.font-family]="card.font">
+      {{ card.title }}
+    </h1>
+
+    <!-- Description -->
+    <p class="card-description fs-4"
+       [style.font-family]="card.font">
+      {{ card.description }}
+    </p>
+
+  </div>
+
 </div>

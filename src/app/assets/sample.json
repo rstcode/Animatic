@@ -1,0 +1,48 @@
+{
+  "users": {
+    "uid_user_001": {
+      "displayName": "Sagar Teja",
+      "email": "sagar@example.com",
+      "createdAt": 1740901800000,
+      "lastLogin": 1762005000000
+    },
+    "uid_user_002": {
+      "displayName": "Rahul Kumar",
+      "email": "rahul@example.com",
+      "createdAt": 1741614300000,
+      "lastLogin": 1761983400000
+    }
+  },
+
+  "cardsMeta": {
+    "A1B2C3": {
+      "revealTime": 1761841800000, 
+      "createdBy": "uid_user_001"
+    },
+    "X7Y9Z5": {
+      "revealTime": null,
+      "createdBy": "uid_user_002"
+    }
+  },
+
+  "cards": {
+    "A1B2C3": {
+      "title": "Happy New Year 🎉",
+      "description": "Wishing you all success!",
+      "animationType": "fade-slide",
+      "font": "Roboto",
+      "backgroundColor": "#000000",
+      "createdAt": 1761225000000,
+      "createdBy": "uid_user_001"
+    },
+    "X7Y9Z5": {
+      "title": "Welcome to Animatic ✨",
+      "description": "Where text comes alive!",
+      "animationType": "pop",
+      "font": "Poppins",
+      "backgroundColor": "#1A73E8",
+      "createdAt": 1759888200000,
+      "createdBy": "uid_user_002"
+    }
+  }
+}

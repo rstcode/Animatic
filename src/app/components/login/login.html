@@ -1,0 +1,15 @@
+<div class="login-card">
+  <h2 *ngIf="!loggedInUser">Sign in with Google</h2>
+
+  <button *ngIf="!loggedInUser" class="google-btn" (click)="signIn()" [disabled]="loading">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+    <span>{{ loading ? 'Signing in...' : 'Sign in with Google' }}</span>
+  </button>
+
+  <div *ngIf="loggedInUser" class="user-info">
+    <p>Welcome, {{ loggedInUser.displayName }} ({{ loggedInUser.email }})</p>
+    <button (click)="logout()" class="btn-cancel">Sign out</button>
+  </div>
+
+  <p class="hint" *ngIf="!loggedInUser">You will be redirected after successful sign-in.</p>
+</div>
