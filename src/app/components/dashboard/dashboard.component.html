@@ -1,77 +1,64 @@
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Animatic Cards</h2>
+<app-animatic-loader *ngIf="isLoading"></app-animatic-loader>
 
-    <button class="btn btn-primary"
-            routerLink="/creator">
-      + Create Card
-    </button>
+<div *ngIf="!isLoading" class="dashboard-container container py-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="dashboard-title">Your Cards</h1>
+    <button class="btn create-btn" routerLink="/creator"> Create + </button>
   </div>
 
-  <ng-container *ngIf="userCards$ | async as cards">
-    
-    <!-- Cards Available -->
-    <div *ngIf="cards && cards.length > 0; else noCards" class="row g-3">
+  <ng-container *ngIf="cards && cards.length; else noCards">
 
-      <div class="col-12 col-sm-6 col-lg-4"
-           *ngFor="let card of cards">
-        <div class="card shadow-sm h-100 border-0 rounded-3">
+    <div *ngIf="cards.length > 0; else noCards" class="row g-4">
 
-          <div class="card-body"
-               [style.background-color]="card.backgroundColor || '#f8f9fa'">
-            <h5 class="card-title fw-bold">{{ card.title }}</h5>
+        <div class="col-12 col-sm-6 col-xl-4" *ngFor="let card of cards" (click)="viewCard(card.code)">
+        <div class="animatic-card">
 
-            <p class="card-text small text-muted mb-1">
-              {{ card.description || "No description" }}
-            </p>
+            <!-- Status -->
+            <!-- <div class="status-tag" [ngClass]="isLocked(card) ? 'locked' : 'unlocked'">
+            <i class="bi" [ngClass]="isLocked(card) ? 'bi-lock-fill' : 'bi-unlock-fill'"></i>
+            </div> -->
 
-            <p class="card-text small">
-              <strong>Animation:</strong> {{ card.animationType }} |
-              <strong>Font:</strong> {{ card.font }}
-            </p>
+            <!-- Title -->
+            <h4 class="card-title" [style.fontFamily]="card.font">
+            {{ card.title }}
+            </h4>
 
-            <p class="card-text text-secondary small mb-2">
-              {{ card.createdAt | date:'medium' }}
-            </p>
+            <!-- Description -->
+            <p class="card-desc">{{ card.description || 'No description yet' }}</p>
 
-          </div>
+            <!-- Date -->
+            <span class="card-date">{{ card.createdAt | date:'medium' }}</span>
 
-        <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
-        
-        <!-- View + Edit side-by-side -->
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-success btn-sm"
-                    [routerLink]="['/view', card.code]">
-            View
-            </button>
+            <!-- Actions -->
+            <div class="actions">
+                <button (click)="editCard(card.code); $event.stopPropagation()"> <i class="bi bi-pencil-square"></i> </button>
 
-            <button class="btn btn-outline-primary btn-sm"
-                    [routerLink]="['/creator', card.code]">
-            Edit
-            </button>
-        </div>
+                <button (click)="copyShareLink(card.code); $event.stopPropagation()"><i class="bi bi-share-fill"></i> </button>
 
-        <!-- Delete bottom-right -->
-        <button class="btn btn-outline-danger btn-sm"
-                (click)="deleteCard(card.code)">
-            Delete
-        </button>
-        </div>
+                <button class="del" (click)="deleteCard(card.code); $event.stopPropagation()"><i class="bi bi-trash-fill"></i></button>
+            </div>
 
         </div>
-      </div>
+        </div>
+
+
     </div>
 
-    <!-- No Cards -->
     <ng-template #noCards>
       <div class="text-center mt-5">
-        <p class="fw-semibold text-secondary">No cards yet 🎨</p>
-        <button class="btn btn-primary mt-2"
-                routerLink="/creator">
-          Create Your First Card
-        </button>
+        <p class="text-secondary fw-semibold">No Cards Yet</p>
+        <button class="btn create-btn"
+                routerLink="/creator">+ Create Card</button>
       </div>
     </ng-template>
 
   </ng-container>
+
+  <ng-template #noCards>
+    <div class="text-center mt-5">
+      <p class="text-secondary fw-semibold">No Cards Yet</p>
+      <button class="btn create-btn" routerLink="/creator">+ Create Card</button>
+    </div>
+  </ng-template>
 </div>

@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { FirebaseService } from './services/firebase.service';
+
 
 @Component({
   selector: 'app-root',
@@ -14,33 +15,30 @@ import { FirebaseService } from './services/firebase.service';
 export class App {
   protected readonly title = signal('FireTest');
   public user$: Observable<any>;
+  isDarkMode = false;
+  showHeader = true;
 
   constructor(private auth: AuthService, private router: Router, private firebaseService: FirebaseService) {
     this.user$ = this.auth.user$;
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.showHeader = !event.url.startsWith('/view/');
+      }
+    });
   }
 
-  login() {
-    this.auth.googleSignIn().then((user) => {
-        console.log('Signed in user:', user);
-        if (user) {
-          this.firebaseService
-            .saveUserProfile(user.uid, {
-              displayName: (user.displayName as string) || '',
-              email: (user.email as string) || '',
-              profilePic: (user.photoURL as string) || null,
-              lastLogin: Math.floor(Date.now() / 1000)
-            })
-            .catch((err) => console.warn('saveUserProfile failed', err))
-            .finally(() => this.router.navigate(['/dashboard']));
-        } else {
-          this.router.navigate(['/dashboard']);
-        }
-      })
-      .catch((err) => {
-        console.error('Sign-in error:', err);
-        alert('Sign-in failed: ' + (err?.message || err));
-      })
-      .finally(() => {});
+  ngOnInit() {   
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      this.isDarkMode = true;
+      document.body.classList.add('dark-theme');
+    }
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    document.body.classList.toggle('dark-theme', this.isDarkMode);
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
   }
 
   logout() {

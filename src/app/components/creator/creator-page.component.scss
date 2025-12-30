@@ -1,61 +1,71 @@
 .creator-container {
-  max-width: 600px;
-  margin: auto;
-  padding: 16px;
+  color: #fff;
 }
 
-.creator-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.page-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: linear-gradient(90deg,#805bff,#3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 18px rgba(128,91,255,0.7);
 }
 
-.preview {
-  margin-top: 24px;
-  padding: 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+.creator-form label {
+  font-weight: 500;
+  margin-bottom: .3rem;
+  color: #dcdcff;
 }
 
-.preview-card {
-  padding: 20px;
-  text-align: center;
+.premium-input {
+  background: #181818!important;
+  color: #fff!important;
+  border: 1px solid rgba(128,91,255,.3);
   border-radius: 12px;
-  background: #fafafa;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: .25s ease;
+}
+
+.premium-input:focus {
+  border-color: #8f7aff;
+  box-shadow: 0 0 12px rgba(128,91,255,.65);
+}
+
+.create-btn {
+  background: linear-gradient(90deg,#6e42ff,#4d8dff);
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 0 22px rgba(120,70,255,.65);
+  transition: .25s ease;
+}
+
+.create-btn:hover {
+  transform: translateY(-2px);
+}
+
+/*** Preview Box Styles ***/
+.preview-box {
+  background: #101010;
+  padding: 25px;
+  border-radius: 16px;
+  min-height: 250px;
+  text-align: center;
+  border: 1px solid rgba(128,91,255,.35);
+  box-shadow: 0 0 22px rgba(128,91,255,.6);
+  transition: transform .4s;
 }
 
 /* Animations */
-.fade-in {
-  animation: fadeIn 1.5s ease-in;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.slide {
-  animation: slideIn 1.2s ease-out;
-}
-
-@keyframes slideIn {
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.typewriter h1, .typewriter p {
+.fade-in { animation: fadeIn .8s ease both; }
+.slide { animation: slideUp .8s ease both; }
+.typewriter h3 {
   overflow: hidden;
   white-space: nowrap;
-  border-right: 2px solid black;
-  animation: typing 3s steps(30, end), blink .75s step-end infinite;
+  border-right: 3px solid #fff;
+  animation: typing 2.5s steps(25) infinite, blink .75s step-end infinite;
 }
 
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-
-@keyframes blink {
-  50% { border-color: transparent }
-}
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes slideUp { from { transform:translateY(20px); opacity:0;} }
+@keyframes typing { from {width:0;} to {width:100%;} }
+@keyframes blink { 50% { border-color: transparent; } }

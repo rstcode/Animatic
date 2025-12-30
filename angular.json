@@ -47,7 +47,9 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/Animatic/",
+              "deployUrl": "/Animatic/"
             },
             "development": {
               "optimization": false,

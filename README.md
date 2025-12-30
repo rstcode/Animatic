@@ -2,6 +2,14 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.3.
 
+## Build and publish commands
+
+```bash
+ ng build --configuration production
+ ng build --configuration=production --base-href "/Animatic/"
+ npx angular-cli-ghpages --dir=dist/animatic-app/browser 
+ ```
+
 ## Development server
 
 To start a local development server, run:

@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.auth.authState().pipe(takeUntil(this.destroy$)).subscribe((u) => {
       this.loggedInUser = u;
-      if (u) {
+      if (u) {        
         // navigate to dashboard automatically when already signed in
         this.router.navigate(['/dashboard']);
       }

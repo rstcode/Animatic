@@ -92,9 +92,11 @@ export class CreatorPageComponent implements OnInit {
 
     if (this.editMode) {
       await this.firebaseService.updateCard(card);
+      this.firebaseService.refreshUserCards(user?.uid || '');
       this.router.navigate(['/dashboard']);
     } else {
       await this.firebaseService.createCard(card);
+      this.firebaseService.refreshUserCards(user?.uid || '');
       this.router.navigate(['/view', card.code]);
     }
   }

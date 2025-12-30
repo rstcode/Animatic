@@ -24,3 +24,25 @@ html, body {
     font-size: 16px;
   }
 }
+
+:root {
+  --bg-color: #ffffff;
+  --card-bg: #ffffff;
+  --text-color: #111111;
+  --accent: #3b82f6;
+  --glow: rgba(59,130,246,0.25);
+}
+
+.dark-theme {
+  --bg-color: #0e0e11;
+  --card-bg: #18181b;
+  --text-color: #e5e7eb;
+  --accent: #805bff;
+  --glow: rgba(128,91,255,0.35);
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background .35s ease, color .35s ease;
+}

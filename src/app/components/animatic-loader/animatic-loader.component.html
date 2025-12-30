@@ -1,0 +1,8 @@
+<div class="animatic-loader">
+  <h1 class="animatic-title">
+  <span *ngFor="let char of titleLetters; let i = index"
+        [style.animationDelay]="(i * 0.12) + 's'">
+    {{ char }}
+  </span>
+</h1>
+</div>

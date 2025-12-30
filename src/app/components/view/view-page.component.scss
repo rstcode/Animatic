@@ -1,56 +1,117 @@
-.view-card {
+.view-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0e0e11;
+  color: #fff;
   text-align: center;
-  background-color: #ffffff !important; /* white background always */
-  color: #000000 !important; /* black text */
-  padding: 20px;
-  width: 100%;
 }
 
-/* Heavy big title */
-.heavy-title {
-  font-size: 3rem;   /* Big & bold */
-  font-weight: 900;  /* Extra heavy */
+:host {
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
-/* Description styling */
-.card-description {
+/* Animated brand loading */
+.loading-text {
+  font-size: 3.8rem;
+  font-weight: 900;
+  background: linear-gradient(90deg,#805bff,#3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulse-glow 1.1s infinite alternate;
+}
+
+/* Countdown Style */
+.countdown-timer {
+  font-size: 4.2rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  color: #edf1f0;
+  text-shadow: 0 0 18px rgba(0,255,200,.55);
+  animation: pulse-timer 1s infinite ease-in-out;
+}
+
+
+/* Reveal Box */
+.reveal-box {
   max-width: 90%;
-  line-height: 1.5;
-  font-weight: 500;
+  padding: 0 20px;
+  animation: fade-in 1.2s ease forwards;
 }
 
-/* Animations */
-.fade-in {
-  animation: fadeIn 1.5s ease-in-out both;
+.reveal-title {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0 0 28px rgba(132,94,255,.8);
+  margin-bottom: 20px;
 }
 
-.slide {
-  animation: slideUp 1.5s ease both;
+.reveal-desc {
+  font-size: 1.5rem;
+  opacity: .85;
+  text-shadow: 0 0 14px rgba(255,255,255,.25);
 }
 
-.typewriter h1 {
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 3px solid #000; /* black cursor */
-  animation: typing 2.5s steps(30, end), blink .75s step-end infinite;
+/* Flash Reveal */
+.flash-beam {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  animation: flashBeam .7s ease-out forwards;
 }
 
-/* Keyframes */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes flashBeam {
+  0% { opacity: .9; }
+  60% { opacity: .4; }
+  100% { opacity: 0; }
 }
 
-@keyframes slideUp {
-  from { transform: translateY(50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* Fullscreen hint */
+.swipe-hint {
+  margin-top: 28px;
+  opacity: .7;
+  font-size: .95rem;
+  background: rgba(255,255,255,.1);
+  padding: 10px 14px;
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  animation: up-down 1.4s infinite ease-in-out;
+  cursor: pointer;
 }
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
+/******** Animations ********/
+@keyframes fade-in { from {opacity:0;} to {opacity:1;} }
+@keyframes pulse-glow { from {opacity:.7;} to {opacity:1;} }
+@keyframes up-down { 0%,100% {transform:translateY(5px);} 50% {transform:translateY(-5px);} }
+@keyframes pulse-timer {
+  0% { transform: scale(.95); }
+  100% { transform: scale(1.05); }
 }
 
-@keyframes blink {
-  50% { border-color: transparent; }
+/**** Core animation style mapping ****/
+.fade-in .reveal-title,
+.fade-in .reveal-desc { animation: fade-in 1.4s ease forwards; }
+
+.slide .reveal-title { animation: slideUp .9s ease-out forwards; }
+.slide .reveal-desc { animation: fade-in .6s .3s ease forwards; }
+@keyframes slideUp { from {transform:translateY(60px); opacity:0;} }
+
+.typewriter .reveal-title {
+  overflow:hidden;
+  white-space:nowrap;
+  border-right: 3px solid #fff;
+  animation: typing 2.6s steps(25), blink .8s infinite;
 }
+@keyframes typing { from {width:0;} to {width:100%;} }
+@keyframes blink { 50% { border-color: transparent; } }

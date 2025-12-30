@@ -1,0 +1,75 @@
+.animatic-loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.animatic-title {
+  display: flex;
+  gap: 8px;
+  font-size: 4rem;
+  font-weight: 900;
+}
+
+.animatic-title span {
+  opacity: 0;
+  animation: letterPop 0.45s ease forwards,
+             colorShift 2.2s linear infinite alternate;
+}
+
+/* Letter appear one by one */
+@keyframes letterPop {
+  0%   { transform: translateY(20px) scale(0.6); opacity: 0; }
+  60%  { transform: translateY(-5px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Neon rainbow shifting */
+@keyframes colorShift {
+  0% {
+    color: #7b61ff;
+    text-shadow: 0 0 10px #7b61ff;
+  }
+  50% {
+    color: #67e8f9;
+    text-shadow: 0 0 12px #67e8f9;
+  }
+  100% {
+    color: #ff80bf;
+    text-shadow: 0 0 14px #ff80bf;
+  }
+}
+
+/* Default (Desktop) */
+.animatic-title {
+  font-size: 4rem;
+  gap: 8px;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .animatic-title {
+    font-size: 3rem;
+    gap: 6px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .animatic-title {
+    font-size: 2.3rem;
+    gap: 4px;
+  }
+}
+
+/* Small phones (≤ 380px width) */
+@media (max-width: 380px) {
+  .animatic-title {
+    font-size: 2rem;
+    gap: 3px;
+  }
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../models/card.model';
 import { CardMeta } from '../models/card-meta.model';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, Subject, combineLatest, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserProfile } from '../models/user.model';
 
@@ -14,6 +14,8 @@ import { firebaseApp } from '../firebase';
 export class FirebaseService {
   private collectionName = 'cards';
   private db = getDatabase(firebaseApp);
+  private cardsCache = new Map<string, Card[]>();
+  private cardUpdates$ = new Subject<void>();
 
   /**
    * Create or update a user profile after login
@@ -124,27 +126,39 @@ export class FirebaseService {
    * Get all cards created by a specific user
    */
   getUserCards(userId: string): Observable<Card[]> {
-    const q = query(ref(this.db, this.collectionName), orderByChild('createdBy'), equalTo(userId));
+    if (this.cardsCache.has(userId)) {
+      return of(this.cardsCache.get(userId)!);
+    }
+
     return new Observable<Card[]>(subscriber => {
+      const q = query(ref(this.db, this.collectionName), orderByChild('createdBy'), equalTo(userId));
       const off = onValue(q, snap => {
         const val = snap.exists() ? snap.val() : {};
-        const list: Card[] = Object.keys(val || {}).map(key => {
-          const item: any = val[key];
+        const list: Card[] = Object.keys(val).map(key => {
+          const item = val[key];
           return {
             title: item.title,
             description: item.description,
             animationType: item.animationType,
             font: item.font,
-            revealTime: undefined,
+            revealTime: item.revealTime ? new Date(item.revealTime) : undefined,
             code: key,
             createdBy: item.createdBy,
             createdAt: item.createdAt ? new Date(item.createdAt) : new Date(0)
-          } as Card;
-        });
-        subscriber.next(list.slice().sort((a, b) => (b.createdAt as Date).getTime() - (a.createdAt as Date).getTime()));
-      }, err => subscriber.error(err));
+          };
+        }).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+        this.cardsCache.set(userId, list);
+        subscriber.next(list);
+      });
+
       return () => off();
     });
+  }
+
+  refreshUserCards(userId: string) {
+    this.cardsCache.delete(userId); // Force fetch again
+    this.cardUpdates$.next();
   }
 
   /**

@@ -5,45 +5,62 @@
   font-family: 'Roboto', sans-serif;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  background: #222;
-  color: #fff;
-
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-
-  .auth-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    button {
-      padding: 0.4rem 0.8rem;
-      border: none;
-      border-radius: 4px;
-      background: #4cafef;
-      color: white;
-      font-size: 0.9rem;
-      cursor: pointer;
-
-      &:hover {
-        background: #2196f3;
-      }
-    }
-
-    .welcome {
-      font-size: 0.9rem;
-    }
-  }
-}
 
 .content {
   flex: 1;
   padding: 1rem;
+}
+
+.header-container {
+  width: 100%;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-color);
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 4px 20px var(--glow);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.brand {
+  font-size: 1.6rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, #a78bfa, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(128,91,255,0.6));
+  letter-spacing: -1px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.theme-toggle {
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: .3s;
+}
+.theme-toggle:hover {
+  transform: scale(1.2);
+  color: var(--accent);
+}
+
+.logout {
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.logout:hover {
+  text-decoration: underline;
 }

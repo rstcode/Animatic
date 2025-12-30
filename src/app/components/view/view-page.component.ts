@@ -19,38 +19,39 @@ export class ViewPageComponent implements OnInit, OnDestroy {
   countdown: string | null = null;
   private timerSub: Subscription | null = null;
   revealReady = false;
+  loading = true;
+  code: string | null = null;
+  showFlash = false;
 
   constructor(private route: ActivatedRoute, private firebaseService: FirebaseService) {}
 
-  ngOnInit() {
-    this.route.params.subscribe(params => {
-      const code = params['code'];
+ ngOnInit() {
+  this.route.params.subscribe(params => {
+    const code = params['code'];
+    this.code = code;
 
-      // Step 1️⃣ Fetch meta first (always available)
-      this.firebaseService.getCardMeta(code).subscribe(meta => {
-        if (!meta) return;
+    this.firebaseService.getCardMeta(code).subscribe(meta => {
+      if (!meta) return;
+      const revealDate = meta.revealTime ? new Date(meta.revealTime) : null;
 
-        if (meta.revealTime) {
-          const revealDate = new Date(meta.revealTime);
-          if (revealDate > new Date()) {
-            this.revealReady = false;
-            this.startCountdown(revealDate);
-          } else {
-            this.revealReady = true;
-            this.loadCard(code);
-          }
-        } else {
-          this.revealReady = true;
-          this.loadCard(code);
-        }
-      });
+      if (revealDate && revealDate > new Date()) {
+        this.revealReady = false;
+        this.startCountdown(revealDate);
+      } else {
+        this.revealReady = true;
+        this.loading = false; // ⬅️ loader hides immediately if already revealed
+        this.loadCard(code);
+      }
     });
-  }
+  });
+}
 
   // Step 2️⃣ Fetch card only when revealed
   loadCard(code: string) {
     this.firebaseService.getCardByCode(code).subscribe(card => {
       this.card = card;
+      // Flash animation 
+      this.showFlash = true;
       console.log("Card Loaded:", card);
     });
   }
@@ -58,6 +59,7 @@ export class ViewPageComponent implements OnInit, OnDestroy {
 
   startCountdown(revealDate: Date) {
     this.updateCountdown(revealDate);
+    this.loading = false;// ⬅️ loader always hides once countdown starts
     this.timerSub = interval(1000).subscribe(() => {
       this.updateCountdown(revealDate);
     });
@@ -67,37 +69,40 @@ export class ViewPageComponent implements OnInit, OnDestroy {
     const now = new Date();
     const diff = revealDate.getTime() - now.getTime();
 
-    if (diff <= 0) {
-      this.countdown = null;
-      this.revealReady = true;
-
-      if (this.timerSub) {
-        this.timerSub.unsubscribe();
-        this.timerSub = null;
-      }
-
-      // ⬅ Automatically reload card data from Firebase once reveal hits
-      this.route.params.subscribe(params => {
-        const code = params['code'];
-        this.firebaseService.getCardByCode(code).subscribe(card => {
-          this.card = card;
-        });
-      });
-
-      return;
+   if (diff <= 0) {
+    this.countdown = null;
+    this.revealReady = true;
+    this.showFullscreenBtn = true;
+     // Flash animation 
+    this.showFlash = true;
+    setTimeout(() => {
+      document.querySelector('.reveal-title')?.classList.add('light-burst');
+    }, 100);
+    if (this.timerSub) {
+      this.timerSub.unsubscribe();
+      this.timerSub = null;
+      this.loadCard(this.code!);
     }
+    return;
+   }
 
     const hours = Math.floor(diff / 3600000);
     const minutes = Math.floor((diff % 3600000) / 60000);
     const seconds = Math.floor((diff % 60000) / 1000);
 
-    this.countdown = `${hours}h ${minutes}m ${seconds}s`;
+    const hh = hours > 0 ? String(hours).padStart(2, '0') : null;
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(seconds).padStart(2, '0');
+
+    // Format display based on hours presence
+    this.countdown = hh ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
   }
 
 
   goFullscreen() {
     this.showFullscreenBtn = false;
     document.documentElement.requestFullscreen();
+    this.showFlash = false;
   }
 
   getAnimationClass(): string {

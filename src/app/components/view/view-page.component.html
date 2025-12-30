@@ -1,42 +1,39 @@
-<div class="container-fluid p-0 text-center">
+<div class="view-container">
 
-  <!-- Loading -->
-  <div *ngIf="!card && !countdown" class="d-flex justify-content-center align-items-center vh-100">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
+  <!-- Phase 1 → Loader -->
+  <div *ngIf="loading" class="center-box">
+    <h1 class="loading-text">Animatic</h1>
+    <p class="loading-subtext">Loading your surprise...</p>
   </div>
 
-  <!-- Countdown before reveal -->
-  <div *ngIf="countdown && !revealReady" class="vh-100 d-flex flex-column justify-content-center align-items-center">
-    <h3 class="fw-bold mb-3">This card will reveal in</h3>
-    <h1 class="display-4 text-primary fw-bold">{{ countdown }}</h1>
+  <!-- Phase 2 → Countdown -->
+  <div *ngIf="!loading && countdown && !revealReady"
+       class="countdown-box center-box">    
+    <h1 class="countdown-timer">{{ countdown }}</h1>
   </div>
 
-  <!-- Fullscreen Button -->
-  <button *ngIf="card && revealReady && showFullscreenBtn"
-          class="btn btn-dark position-fixed bottom-0 start-50 translate-middle-x mb-4 px-4 py-2 fw-semibold"
-          (click)="goFullscreen()">
-    View Fullscreen
-  </button>
+  <!-- Phase 3 → Ready to show card, user must fullscreen -->
+  <div *ngIf="!loading && card && revealReady && showFullscreenBtn"
+       class="center-box tap-hint"
+       (click)="goFullscreen()">
+    Click here to view.!
+  </div>
 
-  <!-- Card Display -->
-  <div *ngIf="card && revealReady"
-       class="d-flex flex-column justify-content-center align-items-center vh-100 view-card px-3"
+  <!-- Phase 4 → Full Reveal Experience -->
+  <div *ngIf="card && revealReady && !showFullscreenBtn"
+       class="reveal-box"
        [ngClass]="getAnimationClass()">
 
-    <!-- Title -->
-    <h1 class="card-title fw-bold heavy-title mb-3"
-        [style.font-family]="card.font">
+    <h1 class="reveal-title"
+        [style.fontFamily]="card.font">
       {{ card.title }}
     </h1>
 
-    <!-- Description -->
-    <p class="card-description fs-4"
-       [style.font-family]="card.font">
+    <p class="reveal-desc"
+       [style.fontFamily]="card.font">
       {{ card.description }}
     </p>
 
   </div>
-
+  <div *ngIf="showFlash" class="flash-beam"></div>
 </div>
