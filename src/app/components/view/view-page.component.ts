@@ -22,6 +22,8 @@ export class ViewPageComponent implements OnInit, OnDestroy {
   loading = true;
   code: string | null = null;
   showFlash = false;
+  private lastTap = 0;
+  private touchStartY = 0;
 
   constructor(private route: ActivatedRoute, private firebaseService: FirebaseService) {}
 
@@ -52,6 +54,7 @@ export class ViewPageComponent implements OnInit, OnDestroy {
       this.card = card;
       // Flash animation 
       this.showFlash = true;
+      this.initGestures();
       console.log("Card Loaded:", card);
     });
   }
@@ -75,6 +78,7 @@ export class ViewPageComponent implements OnInit, OnDestroy {
     this.showFullscreenBtn = true;
      // Flash animation 
     this.showFlash = true;
+    this.initGestures();
     setTimeout(() => {
       document.querySelector('.reveal-title')?.classList.add('light-burst');
     }, 100);
@@ -86,6 +90,7 @@ export class ViewPageComponent implements OnInit, OnDestroy {
     return;
    }
 
+  
     const hours = Math.floor(diff / 3600000);
     const minutes = Math.floor((diff % 3600000) / 60000);
     const seconds = Math.floor((diff % 60000) / 1000);
@@ -100,10 +105,13 @@ export class ViewPageComponent implements OnInit, OnDestroy {
 
 
   goFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    }
     this.showFullscreenBtn = false;
-    document.documentElement.requestFullscreen();
     this.showFlash = false;
   }
+
 
   getAnimationClass(): string {
     if (!this.card) return '';
@@ -114,6 +122,45 @@ export class ViewPageComponent implements OnInit, OnDestroy {
       default: return '';
     }
   }
+
+  private initGestures() {
+    const target = document.querySelector('.view-container');
+    if (!target) return;
+
+    console.log("Gesture Listeners Attached ✔️");
+
+    // Mobile → Double Tap
+    target.addEventListener('touchend', (e: any) => {
+      const now = Date.now();
+      if (this.revealReady && now - this.lastTap < 300) {
+        this.goFullscreen();
+      }
+      this.lastTap = now;
+    });
+
+    // Mobile → Swipe Up
+    target.addEventListener('touchstart', (e: any) => {
+      this.touchStartY = e.changedTouches[0].clientY;
+    });
+
+    target.addEventListener('touchend', (e: any) => {
+      const endY = e.changedTouches[0].clientY;
+      if (this.revealReady && this.touchStartY - endY > 80) {
+        this.goFullscreen();
+      }
+    });
+
+    // Desktop → Double Click
+    target.addEventListener('dblclick', () => {
+      if (this.revealReady) this.goFullscreen();
+    });
+  }
+
+  // After View Init → try to attach early once
+  ngAfterViewInit() {
+    setTimeout(() => this.initGestures(), 300);
+  }
+
 
   ngOnDestroy() {
     if (this.timerSub) {
