@@ -81,6 +81,7 @@ export class ViewPageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.countdown = null;
       this.revealReady = true;
       this.showFullscreenBtn = true;
+      setTimeout(() => this.playRevealFX(), 300);
       this.loadCard();
       this.timerSub?.unsubscribe();
       return;
@@ -155,6 +156,55 @@ export class ViewPageComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.revealReady) this.goFullscreen();
     });
   }
+
+  playRevealFX() {
+    if (!this.card) return;
+
+    const revealBox = document.querySelector('.reveal-box');
+    if (!revealBox) return;
+
+      switch (this.card.template) {
+        case 'celebration':
+          this.launchConfetti();
+          break;
+        case 'mystery':
+          this.addFilmGrain();
+          break;
+      }
+  }
+
+  private randomColor(): string {
+    const colors = [
+      '#FF4D4D', // Red
+      '#FFC107', // Yellow
+      '#4CAF50', // Green
+      '#2196F3', // Blue
+      '#FF6EC7', // Pink
+      '#FF9800', // Orange
+      '#9C27B0'  // Purple
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+
+  launchConfetti() {
+    for (let i = 0; i < 30; i++) {
+      const c = document.createElement('div');
+      c.classList.add('confetti');
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.setProperty('--random-color', this.randomColor());
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 2000);
+    }
+  }
+
+  addFilmGrain() {
+    const fg = document.createElement('div');
+    fg.className = 'film-grain';
+    document.body.appendChild(fg);
+  }
+
+
 
   ngOnDestroy() {
     this.timerSub?.unsubscribe();

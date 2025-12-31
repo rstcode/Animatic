@@ -21,6 +21,8 @@ export class CreatorPageComponent implements OnInit {
   previewCard: Partial<Card> = {};
   editMode = false;
   cardCode: string | null = null;
+  showShareModal = false;
+  shareUrl = '';
 
   constructor(
     private fb: FormBuilder,
@@ -95,7 +97,23 @@ export class CreatorPageComponent implements OnInit {
     } else {
       await this.firebaseService.createCard(card);
       this.firebaseService.refreshUserCards(user?.uid || '');
-      this.router.navigate(['/view', card.code]);
+
+      this.shareUrl = `${location.origin}/Animatic/view/${card.code}`;
+      this.showShareModal = true;
     }
+  }
+
+  copyLink() {
+    navigator.clipboard.writeText(this.shareUrl);
+    alert('Link copied!');
+  }
+
+  openInNewTab() {
+    window.open(this.shareUrl, '_blank');
+  }
+
+  closeShareModal() {
+    this.showShareModal = false;
+    this.router.navigate(['/dashboard']);
   }
 }

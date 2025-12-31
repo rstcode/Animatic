@@ -74,3 +74,19 @@
 
   </div>
 </div>
+
+<div class="share-modal" *ngIf="showShareModal">
+  <div class="share-box">
+    <h3>Card Created! 🎉</h3>
+    <p>Share this link:</p>
+
+    <input type="text" [value]="shareUrl" readonly>
+    
+    <div class="btn-row">
+      <button class="btn copy" (click)="copyLink()">Copy</button>
+      <button class="btn open" (click)="openInNewTab()">Open</button>
+    </div>
+
+    <button class="close-btn" (click)="closeShareModal()">Close</button>
+  </div>
+</div>

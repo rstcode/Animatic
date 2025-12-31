@@ -1,32 +1,28 @@
-<div class="view-container">
+<div class="view-container" [ngClass]="card?.theme">
 
-  <!-- Phase 1 → Loader -->
+  <!-- LOADING -->
   <div *ngIf="loading" class="center-box">
     <h1 class="loading-text">Animatic</h1>
     <p class="loading-subtext">Loading your surprise...</p>
   </div>
 
-  <!-- Phase 2 → Countdown -->
+  <!-- COUNTDOWN -->
   <div *ngIf="!loading && countdown && !revealReady"
        class="countdown-box center-box">    
-       <h1 class="countdown-timer" [ngClass]="countdownSize">{{ countdown }}</h1>
+    <h1 class="countdown-timer" [ngClass]="countdownSize">{{ countdown }}</h1>
   </div>
 
-  <!-- Phase 3 → Tap/Swipe to view fullscreen -->
+  <!-- TAP OR SWIPE HINT -->
   <div *ngIf="!loading && card && revealReady && showFullscreenBtn"
        class="center-box tap-hint"
-       (click)="goFullscreen()"
-       (touchend)="handleTouch($event)">
+       (click)="goFullscreen()">
     Tap or Swipe Up to Reveal
   </div>
 
-  <!-- Phase 4 → Full Reveal -->
+  <!-- CARD REVEAL -->
   <div *ngIf="card && revealReady && !showFullscreenBtn"
        class="reveal-box"
-       [ngClass]="[card.template, card.theme]"
-       (dblclick)="goFullscreen()"
-       (touchend)="handleDoubleTap($event)"
-       (touchstart)="touchStart($event)">
+       [ngClass]="[card.template, card.theme]">
 
     <h1 class="reveal-title" [style.fontFamily]="card.font">
       {{ card.title }}

@@ -241,3 +241,101 @@
     opacity: 1;
   }
 }
+
+.cinematic {
+  animation: heroZoom 1.6s ease-out forwards;
+  position: relative;
+}
+
+.cinematic::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -60%;
+  width: 200%;
+  height: 180%;
+  background: linear-gradient(120deg, rgba(255,70,0,.4), rgba(255,255,255,0));
+  mix-blend-mode: screen;
+  transform: rotate(25deg);
+  animation: lightSweep 2.4s ease-in-out 1.5s forwards;
+}
+
+@keyframes lightSweep {
+  0% { transform: translateX(-60%) rotate(25deg); opacity: 0; }
+  45% { opacity: 1; }
+  100% { transform: translateX(40%) rotate(25deg); opacity: 0; }
+}
+
+.elegant {
+  animation: softFade 1.2s ease-in-out forwards;
+  position: relative;
+}
+
+.elegant::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 40%, rgba(255,255,255,0.35));
+  z-index: -1;
+  opacity: 0;
+  animation: vignetteFade .8s forwards 1s;
+}
+
+@keyframes vignetteFade {
+  0% { opacity: 0; }
+  100% { opacity: .5; }
+}
+
+.celebration {
+  animation: confettiBounce 1.2s ease-in-out forwards;
+}
+
+.confetti {
+  position: fixed;
+  width: 6px;
+  height: 12px;
+  background: var(--random-color);
+  top: -20px;
+  animation: fallConfetti 1.8s linear forwards;
+}
+
+@keyframes fallConfetti {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+
+.mystery {
+  background: #0d0d0d;
+  color: #eaeaea;
+  position: relative;
+  animation: noirReveal 2s ease-out forwards;
+}
+
+.mystery::before,
+.mystery::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 8vh;
+  background: #000;
+  z-index: 100;
+  animation: filmOpen 1.4s ease forwards;
+}
+
+.mystery::before { top: 0; }
+.mystery::after { bottom: 0; }
+
+@keyframes filmOpen {
+  from { height: 50vh; }
+  to { height: 8vh; }
+}
+
+.film-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,...grain texture...");
+  mix-blend-mode: overlay;
+  opacity: .15;
+}
+
