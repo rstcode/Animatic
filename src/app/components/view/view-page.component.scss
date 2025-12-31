@@ -1,3 +1,4 @@
+/* WRAPPER */
 .view-container {
   height: 100vh;
   width: 100vw;
@@ -11,8 +12,8 @@
 
 /******** LOADING ********/
 .center-box {
-  text-align: center;
   color: white;
+  text-align: center;
 }
 
 .loading-text {
@@ -21,12 +22,18 @@
   background: linear-gradient(90deg, #914EFF, #00E1FF);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: pulseGlow 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  from { opacity: 0.75; }
+  to { opacity: 1; }
 }
 
 .loading-subtext {
-  margin-top: 10px;
   font-size: 1rem;
-  opacity: 0.7;
+  opacity: .65;
+  margin-top: 8px;
 }
 
 /******** COUNTDOWN ********/
@@ -36,24 +43,20 @@
   font-weight: 900;
   color: #00ffe0;
   text-shadow: 0 0 20px rgba(0,255,224,0.6);
-  animation: glowPulse 1s ease-in-out infinite alternate;
-}
-
-@keyframes glowPulse {
-  0% { opacity: .85; }
-  100% { opacity: 1; }
+  animation: glowPulse 1s infinite alternate;
 }
 
 /******** FULLSCREEN HINT ********/
 .tap-hint {
-  animation: hintFloat 1.4s infinite ease-in-out alternate;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   color: white;
-  gap: 6px;
-  font-size: 1rem;
-  opacity: 0.9;
+  font-size: 1.1rem;
+  display: inline-flex;
+  padding: 14px 24px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  animation: hintFloat 1.4s infinite alternate;
+  cursor: pointer;
 }
 
 @keyframes hintFloat {
@@ -61,50 +64,50 @@
   100% { transform: translateY(-6px); }
 }
 
-/******** REVEAL ********/
+/******** CARD REVEAL ********/
 .reveal-box {
-  text-align: center;
-  padding: 20px;
   width: 100%;
-  transform-style: preserve-3d;
+  height: 100vh;
+  text-align: center;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Cinematic Title */
+/* Title */
 .reveal-title {
-  font-size: 3.6rem;
+  font-size: 3.4rem;
   font-weight: 900;
-  color: white;
+  margin-bottom: 15px;
   opacity: 0;
-  animation: fadeSlide .9s ease forwards;
+  animation: fadeSlide 1s ease forwards;
 }
 
-/* Title Slide-In */
 @keyframes fadeSlide {
-  0% { opacity: 0; transform: translateY(-40px) scale(.95); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; }
 }
 
-/* Cinematic Description */
+/* Description */
 .reveal-desc {
   font-size: 1.5rem;
+  line-height: 1.4;
   opacity: 0;
-  color: #dcdcdc;
-  padding: 10px 25px;
-  margin-top: 12px;
-  animation: fadeInDesc .9s ease forwards .4s;
+  animation: fadeInDesc 1s ease forwards .4s;
 }
 
 @keyframes fadeInDesc {
   from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /******** FLASH BEAM ********/
 .flash-beam {
   position: absolute;
-  top: 0; left: 0;
   width: 100%; height: 100%;
-  background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 70%);
+  top: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
   animation: flashReveal .7s ease forwards;
 }
 
@@ -113,21 +116,128 @@
   100% { opacity: 0; visibility: hidden; }
 }
 
-/******** TYPO ANIMATIONS ********/
-.fade-in { animation: fadeSlide .9s ease forwards; }
-
-.slide {
-  animation: slideUp 1.2s ease forwards;
+/*************************************
+  THEMES
+*************************************/
+.light {
+  background: #fff;
+  color: #000;
 }
 
-@keyframes slideUp {
-  0% { opacity: 0; transform: translateY(60px); }
-  100% { opacity: 1; transform: translateY(0); }
+.midnight {
+  background: #000;
+  color: #fff;
 }
 
-/******** MOBILE RESPONSIVENESS ********/
+.cyber {
+  background: #050505;
+  color: #00f7ff;
+  text-shadow: 0 0 15px #00f7ff;
+}
+
+/*************************************
+  TEMPLATES
+*************************************/
+.cinematic .reveal-title {
+  letter-spacing: 2px;
+}
+
+.elegant {
+  animation: softFade .9s ease-in-out forwards;
+}
+
+@keyframes softFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.celebration {
+  animation: popBounce 1.1s ease forwards;
+  position: relative;
+}
+
+@keyframes popBounce {
+  0% { transform: scale(.7); opacity: 0; }
+  70% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.noir {
+  color: #eaeaea;
+  filter: grayscale(100%);
+  animation: noirReveal 1.3s ease-out forwards;
+}
+
+@keyframes noirReveal {
+  from { filter: blur(10px); opacity: 0; }
+  to { filter: blur(0); opacity: 1; }
+}
+
+/******** MOBILE ********/
 @media (max-width: 600px) {
-  .reveal-title { font-size: 2.4rem; }
-  .reveal-desc { font-size: 1.2rem; padding: 10px; }
+  .reveal-title { font-size: 2.2rem; }
+  .reveal-desc { font-size: 1.1rem; padding: 0 6px; }
   .countdown-timer { font-size: 3rem; }
+}
+
+.countdown-timer {
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+  color: #e8e8e8;
+  text-shadow: 0 0 20px rgba(101, 181, 238, 0.6);
+  transition: font-size .25s ease;
+}
+
+.countdown-timer.normal {
+  font-size: 4rem;
+}
+
+.countdown-timer.big {
+  font-size: 5rem;
+}
+
+.countdown-timer.huge {
+  font-size: 6.2rem;
+}
+
+
+/* Mobile */
+@media (max-width: 600px) {
+  .countdown-timer.normal { font-size: 2.8rem; }
+  .countdown-timer.big { font-size: 3.6rem; }
+  .countdown-timer.huge { font-size: 4.8rem; }
+}
+
+/* Pulse animation when < 1 min */
+.countdown-timer.huge {
+  animation: pulseAnim 0.45s infinite alternate ease-in-out;
+}
+
+@keyframes pulseAnim {
+  0% {
+    transform: scale(1);
+    opacity: .85;
+    text-shadow: 0 0 12px rgba(0,255,224,0.7);
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 1;
+    text-shadow: 0 0 25px rgba(0,255,224,1);
+  }
+}
+
+/* Flash burst effect */
+.countdown-flash {
+  animation: flashHit .4s ease-in-out forwards;
+}
+
+@keyframes flashHit {
+  0% { 
+    filter: brightness(4); 
+    opacity: 1;
+  }
+  100% { 
+    filter: brightness(1); 
+    opacity: 1;
+  }
 }

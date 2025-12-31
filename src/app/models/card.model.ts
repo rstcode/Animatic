@@ -1,11 +1,11 @@
 export interface Card {
+  code: string;
   title: string;
   description?: string;
-  animationType?: string;
   font?: string;
-  backgroundColor?: string;
-  revealTime?: Date | null;
-  code: string;
+  revealTime?: Date;
+  template: string;  // NEW
+  theme: string;     // NEW
   createdBy: string;
-  createdAt: Date;
+  createdAt?: Date;
 }

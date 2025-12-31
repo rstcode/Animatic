@@ -1,53 +1,74 @@
 <div class="creator-container container py-5">
   <div class="row justify-content-center g-4">
+
     <!-- Form Section -->
     <div class="col-lg-5">
-
       <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="creator-form">
 
+        <!-- Title -->
         <div class="form-group">
           <label>Title</label>
-          <input formControlName="title" type="text" class="form-control premium-input" placeholder="Amazing Surprise!">
+          <input formControlName="title" type="text" class="form-control premium-input"
+                 placeholder="Amazing Surprise!">
         </div>
 
+        <!-- Description -->
         <div class="form-group">
           <label>Description</label>
-          <textarea formControlName="description" rows="2" class="form-control premium-input"></textarea>
+          <textarea formControlName="description" rows="2"
+                    class="form-control premium-input"
+                    placeholder="Add a short message..."></textarea>
         </div>
 
+        <!-- Template Style -->
         <div class="form-group">
-          <label>Animation Style</label>
-          <select formControlName="animationType" class="form-control premium-input">
-            <option value="fade-in">Fade In</option>
-            <option value="slide">Slide</option>
-            <option value="typewriter">Typewriter</option>
+          <label>Template Style</label>
+          <select class="form-control premium-input" formControlName="template">
+            <option value="cinematic">🎬 Cinematic</option>
+            <option value="elegant">🌫 Elegant Fade</option>
+            <option value="celebration">🎉 Celebration Pop</option>
+            <option value="mystery">🕶 Mystery Film</option>
           </select>
         </div>
 
+        <!-- Theme -->
         <div class="form-group">
-          <label>Font Style</label>
-          <select formControlName="font" class="form-control premium-input">
-            <option *ngFor="let f of fonts" [value]="f">{{ f }}</option>
+          <label>Theme</label>
+          <select class="form-control premium-input" formControlName="theme">
+            <option value="clean">⚪ Premium Clean</option>
+            <option value="midnight">🌒 Midnight</option>
+            <option value="cyber">⚡ Cyber Glow</option>
           </select>
         </div>
 
+        <!-- Reveal Time Optional -->
         <div class="form-group">
           <label>Reveal Time (Optional)</label>
-          <input formControlName="revealTime" type="datetime-local" class="form-control premium-input" />
+          <input formControlName="revealTime" type="datetime-local"
+                 class="form-control premium-input" />
         </div>
 
-        <button class="btn create-btn w-100 mt-3" [disabled]="cardForm.invalid">
-           {{editMode?'Update':'Create'}} Card
+        <!-- Button -->
+        <button class="btn create-btn w-100 mt-3"
+                [disabled]="cardForm.invalid">
+          {{ editMode ? 'Update':'Create' }} Card
         </button>
 
       </form>
     </div>
 
     <!-- Live Preview Section -->
-    <div class="col-lg-5">
-      <div class="preview-box" [ngClass]="previewCard.animationType" *ngIf="previewCard">
-        <h3 [style.fontFamily]="previewCard.font">{{ previewCard.title || 'Preview Title' }}</h3>
-        <p [style.fontFamily]="previewCard.font">{{ previewCard.description || 'Description will appear here...' }}</p>
+    <div class="preview-wrapper">
+      <div class="preview-box"
+           [ngClass]="[cardForm.value.template, cardForm.value.theme]">
+
+        <h2 [style.font-family]="cardForm.value.font">
+          {{ cardForm.value.title || "Your Title" }}
+        </h2>
+
+        <p [style.font-family]="cardForm.value.font">
+          {{ cardForm.value.description || "Your description appears here…" }}
+        </p>
       </div>
     </div>
 

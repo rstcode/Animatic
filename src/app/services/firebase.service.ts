@@ -46,9 +46,8 @@ export class FirebaseService {
   const dbCard = {
     title: card.title,
     description: card.description ?? '',
-    animationType: card.animationType,
-    font: card.font,
-    backgroundColor: card.backgroundColor ?? '#ffffffff',
+    template: card.template,
+    theme: card.theme,    
     createdAt: card.createdAt ? (card.createdAt as any).getTime() : Date.now(),
     createdBy: card.createdBy
   };
@@ -110,8 +109,8 @@ export class FirebaseService {
         const card: Card = {
           title: cardData.title,
           description: cardData.description,
-          animationType: cardData.animationType,
-          font: cardData.font,
+          template: cardData.template,
+          theme: cardData.theme,
           revealTime: revealTime ? new Date(revealTime) : undefined,
           code,
           createdBy: (cardData as any).createdBy,
@@ -139,8 +138,8 @@ export class FirebaseService {
           return {
             title: item.title,
             description: item.description,
-            animationType: item.animationType,
-            font: item.font,
+            template: item.template,
+            theme: item.theme,
             revealTime: item.revealTime ? new Date(item.revealTime) : undefined,
             code: key,
             createdBy: item.createdBy,
@@ -168,9 +167,8 @@ export class FirebaseService {
     const dbCard = {
       title: card.title,
       description: card.description ?? '',
-      animationType: card.animationType,
-      font: card.font,
-      backgroundColor: card.backgroundColor ?? '#ffffffff',
+      template: card.template,
+      theme: card.theme,
       createdAt: card.createdAt ? (card.createdAt as any).getTime() : Date.now(),
       createdBy: card.createdBy
     };

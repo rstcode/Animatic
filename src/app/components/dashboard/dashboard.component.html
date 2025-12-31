@@ -13,11 +13,11 @@
 
         <div class="col-12 col-sm-6 col-xl-4" *ngFor="let card of cards" (click)="viewCard(card.code)">
         <div class="animatic-card">
-
-            <!-- Status -->
-            <!-- <div class="status-tag" [ngClass]="isLocked(card) ? 'locked' : 'unlocked'">
-            <i class="bi" [ngClass]="isLocked(card) ? 'bi-lock-fill' : 'bi-unlock-fill'"></i>
-            </div> -->
+          <!-- Top-Right Style Tags -->
+           <div class="style-top-badges">
+              <span class="badge theme-badge">{{ card.theme }}</span>
+              <span class="badge template-badge">{{ card.template }}</span>
+           </div>
 
             <!-- Title -->
             <h4 class="card-title" [style.fontFamily]="card.font">

@@ -9,34 +9,34 @@
   <!-- Phase 2 → Countdown -->
   <div *ngIf="!loading && countdown && !revealReady"
        class="countdown-box center-box">    
-    <h1 class="countdown-timer">{{ countdown }}</h1>
+       <h1 class="countdown-timer" [ngClass]="countdownSize">{{ countdown }}</h1>
   </div>
 
-  <!-- Phase 3 → Ready, waiting for fullscreen gesture -->
+  <!-- Phase 3 → Tap/Swipe to view fullscreen -->
   <div *ngIf="!loading && card && revealReady && showFullscreenBtn"
-       class="tap-hint center-box">
-    <i class="bi bi-arrows-fullscreen"></i>
-    <span>Double Tap / Swipe Up to View</span>
+       class="center-box tap-hint"
+       (click)="goFullscreen()"
+       (touchend)="handleTouch($event)">
+    Tap or Swipe Up to Reveal
   </div>
 
-  <!-- Phase 4 → Full Reveal Experience -->
+  <!-- Phase 4 → Full Reveal -->
   <div *ngIf="card && revealReady && !showFullscreenBtn"
        class="reveal-box"
-       [ngClass]="getAnimationClass()">
+       [ngClass]="[card.template, card.theme]"
+       (dblclick)="goFullscreen()"
+       (touchend)="handleDoubleTap($event)"
+       (touchstart)="touchStart($event)">
 
-    <h1 class="reveal-title"
-        [style.fontFamily]="card.font">
+    <h1 class="reveal-title" [style.fontFamily]="card.font">
       {{ card.title }}
     </h1>
 
-    <p class="reveal-desc"
-       [style.fontFamily]="card.font">
+    <p class="reveal-desc" [style.fontFamily]="card.font">
       {{ card.description }}
     </p>
 
   </div>
 
-  <!-- Flash effect overlay -->
   <div *ngIf="showFlash" class="flash-beam"></div>
-
 </div>

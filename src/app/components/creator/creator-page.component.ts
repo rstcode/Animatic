@@ -16,14 +16,11 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [CommonModule, ReactiveFormsModule]
 })
 export class CreatorPageComponent implements OnInit {
-  
+
   cardForm!: FormGroup;
   previewCard: Partial<Card> = {};
   editMode = false;
   cardCode: string | null = null;
-
-  fonts = ['Roboto', 'Open Sans', 'Bradley Hand', 'Cursive', 'Monospace'];
-  animations = ['fade-in', 'slide', 'typewriter'];
 
   constructor(
     private fb: FormBuilder,
@@ -38,8 +35,8 @@ export class CreatorPageComponent implements OnInit {
     this.cardForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
-      animationType: ['', Validators.required],
-      font: ['', Validators.required],
+      template: ['cinematic', Validators.required], // PREMIUM DEFAULT
+      theme: ['clean', Validators.required],       // PREMIUM DEFAULT
       revealTime: ['']
     });
 
@@ -48,43 +45,44 @@ export class CreatorPageComponent implements OnInit {
       this.editMode = !!this.cardCode;
 
       if (this.editMode && this.cardCode) {
-        this.firebaseService.getCardByCode(this.cardCode, this.authService.getCurrentUser()?.uid)
-          .subscribe(card => {
-            if (!card) return;
-            this.cardForm.patchValue({
-              title: card.title,
-              description: card.description,
-              animationType: card.animationType,
-              font: card.font,
-              revealTime: card.revealTime ? this.formatDate(card.revealTime) : ''
-            });
-            this.previewCard = card;
+        this.firebaseService.getCardByCode(
+          this.cardCode,
+          this.authService.getCurrentUser()?.uid
+        ).subscribe(card => {
+          if (!card) return;
+          
+          this.cardForm.patchValue({
+            title: card.title,
+            description: card.description,
+            template: card.template,
+            theme: card.theme,
+            revealTime: card.revealTime ? this.formatDate(card.revealTime) : ''
           });
+
+          this.previewCard = card;
+        });
       }
     });
 
     this.cardForm.valueChanges.subscribe(val => this.previewCard = val);
   }
 
-  // Convert Date → yyyy-MM-ddThh:mm for input[type=datetime-local]
   formatDate(date: Date): string {
-    return new Date(date)
-      .toISOString()
-      .slice(0, 16); // remove seconds + Z
+    return new Date(date).toISOString().slice(0, 16);
   }
 
   async onSubmit() {
     if (this.cardForm.invalid) return;
 
     const user = this.authService.getCurrentUser();
-    
     const formValue = this.cardForm.value;
+
     const card: Card = {
       code: this.editMode ? this.cardCode! : generateRandomCode(),
       title: formValue.title,
       description: formValue.description,
-      animationType: formValue.animationType,
-      font: formValue.font,
+      template: formValue.template,
+      theme: formValue.theme,
       revealTime: formValue.revealTime ? new Date(formValue.revealTime) : undefined,
       createdBy: user?.uid || 'anonymous',
       createdAt: new Date()

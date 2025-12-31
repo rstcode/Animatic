@@ -1,71 +1,141 @@
+/* ===== CONTAINER ===== */
 .creator-container {
-  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
 }
 
-.page-title {
-  font-size: 2.4rem;
-  font-weight: 700;
-  background: linear-gradient(90deg,#805bff,#3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 18px rgba(128,91,255,0.7);
+/* ===== FORM STYLING ===== */
+.creator-form .form-group {
+  margin-bottom: 20px;
 }
 
 .creator-form label {
-  font-weight: 500;
-  margin-bottom: .3rem;
-  color: #dcdcff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  display: block;
+  color: var(--text-color);
 }
 
 .premium-input {
-  background: #181818!important;
-  color: #fff!important;
-  border: 1px solid rgba(128,91,255,.3);
-  border-radius: 12px;
-  transition: .25s ease;
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  color: var(--text-color);
+  transition: border 0.2s;
 }
 
 .premium-input:focus {
-  border-color: #8f7aff;
-  box-shadow: 0 0 12px rgba(128,91,255,.65);
+  border-color: #6d5bff;
+  box-shadow: 0 0 10px rgba(109,91,255,0.5);
+  outline: none;
 }
 
+/* Submit Button */
 .create-btn {
-  background: linear-gradient(90deg,#6e42ff,#4d8dff);
+  background: linear-gradient(135deg, #6d5bff, #3b82f6);
+  color: #fff;
   font-weight: 700;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 12px;
-  box-shadow: 0 0 22px rgba(120,70,255,.65);
-  transition: .25s ease;
+  font-size: 1.1rem;
+  border: none;
+  transition: 0.25s;
 }
 
 .create-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(109,91,255,0.4);
 }
 
-/*** Preview Box Styles ***/
+/* ===== LIVE PREVIEW ===== */
+.preview-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .preview-box {
-  background: #101010;
-  padding: 25px;
-  border-radius: 16px;
+  width: 100%;
+  max-width: 350px;
   min-height: 250px;
+  border-radius: 18px;
+  padding: 22px;
   text-align: center;
-  border: 1px solid rgba(128,91,255,.35);
-  box-shadow: 0 0 22px rgba(128,91,255,.6);
-  transition: transform .4s;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--card-bg);
+  transition: all 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Title */
+.preview-box h2 {
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+/* Description */
+.preview-box p {
+  opacity: 0.85;
+  font-size: 1.05rem;
+}
+
+/* ===== TEMPLATE PREVIEW EFFECTS ===== */
+.preview-box.cinematic {
+  animation: none;
+  letter-spacing: 2px;
+}
+
+.preview-box.elegant {
+  animation: softFade 0.8s ease-in-out;
+}
+
+.preview-box.celebration {
+  animation: popBounce .6s ease-in-out;
+}
+
+.preview-box.noir {
+  filter: grayscale(100%);
+}
+
+/* ===== THEME ===== */
+.preview-box.light {
+  background: #fff;
+  color: #000;
+}
+
+.preview-box.midnight {
+  background: #0f0f0f;
+  color: #fff;
+}
+
+.preview-box.cyber {
+  background: #02010a;
+  color: #00eaff;
+  text-shadow: 0 0 8px #00eaff;
 }
 
 /* Animations */
-.fade-in { animation: fadeIn .8s ease both; }
-.slide { animation: slideUp .8s ease both; }
-.typewriter h3 {
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 3px solid #fff;
-  animation: typing 2.5s steps(25) infinite, blink .75s step-end infinite;
+@keyframes softFade {
+  from { opacity: 0; transform: translateY(10px);}
+  to   { opacity: 1; transform: translateY(0);}
 }
 
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-@keyframes slideUp { from { transform:translateY(20px); opacity:0;} }
-@keyframes typing { from {width:0;} to {width:100%;} }
-@keyframes blink { 50% { border-color: transparent; } }
+@keyframes popBounce {
+  0% { transform: scale(.8); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* ===== MOBILE ===== */
+@media(max-width: 992px){
+  .preview-wrapper {
+    margin-top: 20px;
+  }
+}
