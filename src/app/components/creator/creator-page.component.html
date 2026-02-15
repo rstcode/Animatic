@@ -26,6 +26,7 @@
           <select class="form-control premium-input" formControlName="template">
             <option value="cinematic">🎬 Cinematic</option>
             <option value="elegant">🌫 Elegant Fade</option>
+            <option value="celebrate2026">✨ Celebrate 2026</option>
             <option value="celebration">🎉 Celebration Pop</option>
             <option value="mystery">🕶 Mystery Film</option>
           </select>
@@ -45,7 +46,7 @@
         <div class="form-group">
           <label>Reveal Time (Optional)</label>
           <input formControlName="revealTime" type="datetime-local"
-                 class="form-control premium-input" />
+                 class="form-control premium-input" [min]="todayString" />
         </div>
 
         <!-- Button -->

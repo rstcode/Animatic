@@ -23,6 +23,7 @@ export class CreatorPageComponent implements OnInit {
   cardCode: string | null = null;
   showShareModal = false;
   shareUrl = '';
+  todayString = new Date().toISOString().slice(0, 16);
 
   constructor(
     private fb: FormBuilder,
@@ -69,9 +70,17 @@ export class CreatorPageComponent implements OnInit {
     this.cardForm.valueChanges.subscribe(val => this.previewCard = val);
   }
 
-  formatDate(date: Date): string {
-    return new Date(date).toISOString().slice(0, 16);
+  formatDate(date: any): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    const hours = ('0' + d.getHours()).slice(-2);
+    const minutes = ('0' + d.getMinutes()).slice(-2);
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
+
 
   async onSubmit() {
     if (this.cardForm.invalid) return;

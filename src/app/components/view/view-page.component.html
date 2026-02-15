@@ -24,11 +24,11 @@
        class="reveal-box"
        [ngClass]="[card.template, card.theme]">
 
-    <h1 class="reveal-title" [style.fontFamily]="card.font">
+    <h1 class="reveal-title" [ngClass]="card?.template">
       {{ card.title }}
     </h1>
 
-    <p class="reveal-desc" [style.fontFamily]="card.font">
+    <p class="reveal-desc" [ngClass]="card?.template">
       {{ card.description }}
     </p>
 
